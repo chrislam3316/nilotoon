@@ -3,7 +3,7 @@
 #ifndef Include_NiloZOffset
 #define Include_NiloZOffset
 
-// Push an imaginary vertex towards camera in view space (linear, view space unit), 
+// Push an imaginary vertex farther from the camera in view space (linear view-space units),
 // then only overwrite original positionCS.z using imaginary vertex's result positionCS.z value
 // Will only affect ZTest ZWrite's depth value of vertex shader
 
@@ -22,14 +22,15 @@ float4 NiloGetNewClipPosWithZOffset(float4 originalPositionCS, float viewSpaceZO
         float modifiedPositionVS_Z = -originalPositionCS.w + -viewSpaceZOffsetAmount; // push imaginary vertex
         float modifiedPositionCS_Z = modifiedPositionVS_Z * ProjM_ZRow_ZW[0] + ProjM_ZRow_ZW[1];
         originalPositionCS.z = modifiedPositionCS_Z * originalPositionCS.w / (-modifiedPositionVS_Z); // overwrite positionCS.z
-        return originalPositionCS;    
+        return originalPositionCS;
     }
     else
     {
         ////////////////////////////////
         //Orthographic camera case
         ////////////////////////////////
-        originalPositionCS.z += -viewSpaceZOffsetAmount / _ProjectionParams.z; // push imaginary vertex and overwrite positionCS.z
+        // The projection coefficient handles reversed Z, near-plane range and graphics API conventions.
+        originalPositionCS.z -= viewSpaceZOffsetAmount * UNITY_MATRIX_P[2][2] * originalPositionCS.w;
         return originalPositionCS;
     }
 }

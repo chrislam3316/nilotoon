@@ -1,3 +1,5 @@
+> **This fork now includes independent Unity 6 / URP 17 extensions.** See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the actual feature list, multi-camera perspective correction, setup and validation limits. The original upstream README below describes the tutorial and the separate commercial NiloToon product; it is not the feature specification for this fork.
+
 # About this repository
 
 This repository does NOT contain the full version of NiloToonURP.  
